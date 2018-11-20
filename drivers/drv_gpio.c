@@ -1669,6 +1669,7 @@ static rt_err_t stm32_pin_attach_irq(struct rt_device *device, rt_int32_t pin,
     rt_uint16_t gpio_pin;
     rt_base_t level;
     rt_int32_t irqindex = -1;
+    GPIO_InitTypeDef GPIO_InitStruct;
     gpio_pin = get_pin(pin);
     if (get_st_gpio(gpio_pin) == RT_NULL)
     {
@@ -1698,6 +1699,27 @@ static rt_err_t stm32_pin_attach_irq(struct rt_device *device, rt_int32_t pin,
     pin_irq_hdr_tab[irqindex].mode = mode;
     pin_irq_hdr_tab[irqindex].args = args;
     rt_hw_interrupt_enable(level);
+    
+    /* GPIO Periph clock enable */
+    drv_clock_enable(gpio_pin);
+    /* Configure GPIO_InitStructure */
+    GPIO_InitStruct.Pin = get_st_pin(gpio_pin);
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    switch (pin_irq_hdr_tab[irqindex].mode)
+    {
+    case PIN_IRQ_MODE_RISING:
+        GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+        break;
+    case PIN_IRQ_MODE_FALLING:
+        GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+        break;
+    case PIN_IRQ_MODE_RISING_FALLING:
+        GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
+        break;
+    }
+    HAL_GPIO_Init(get_st_gpio(gpio_pin), &GPIO_InitStruct);
+    
     return RT_EOK;
 }
 
@@ -1737,7 +1759,7 @@ static rt_err_t stm32_pin_irq_enable(struct rt_device *device, rt_base_t pin,
     const struct pin_irq_map *irqmap;
     rt_base_t level;
     rt_int32_t irqindex = -1;
-    GPIO_InitTypeDef GPIO_InitStruct;
+    
     gpio_pin = get_pin(pin);
     if (get_st_gpio(gpio_pin) == RT_NULL)
     {
@@ -1757,25 +1779,9 @@ static rt_err_t stm32_pin_irq_enable(struct rt_device *device, rt_base_t pin,
             return RT_ENOSYS;
         }
         irqmap = &pin_irq_map[irqindex];
-        /* GPIO Periph clock enable */
-        drv_clock_enable(gpio_pin);
-        /* Configure GPIO_InitStructure */
-        GPIO_InitStruct.Pin = get_st_pin(gpio_pin);
-        GPIO_InitStruct.Pull = GPIO_NOPULL;
-        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-        switch (pin_irq_hdr_tab[irqindex].mode)
-        {
-        case PIN_IRQ_MODE_RISING:
-            GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-            break;
-        case PIN_IRQ_MODE_FALLING:
-            GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
-            break;
-        case PIN_IRQ_MODE_RISING_FALLING:
-            GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
-            break;
-        }
-        HAL_GPIO_Init(get_st_gpio(gpio_pin), &GPIO_InitStruct);
+        HAL_NVIC_ClearPendingIRQ(irqmap->irqno);
+        __HAL_GPIO_EXTI_CLEAR_IT(irqindex);
+        __HAL_GPIO_EXTI_CLEAR_FLAG(irqindex);
         HAL_NVIC_SetPriority(irqmap->irqno, 5, 0);
         HAL_NVIC_EnableIRQ(irqmap->irqno);
         rt_hw_interrupt_enable(level);
@@ -1788,6 +1794,7 @@ static rt_err_t stm32_pin_irq_enable(struct rt_device *device, rt_base_t pin,
             return RT_ENOSYS;
         }
         HAL_NVIC_DisableIRQ(irqmap->irqno);
+        HAL_NVIC_ClearPendingIRQ(irqmap->irqno);
     }
     else
     {
