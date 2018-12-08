@@ -10,7 +10,7 @@
       <TargetName>RT-Thread BSP</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
+      <pCCUsed>5060422::V5.06 update 4 (build 422)::ARMCC</pCCUsed>
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -312,7 +312,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>1</Optim>
+            <Optim>4</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>0</OneElfS>
@@ -336,9 +336,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_HAL_DRIVER, STM32F469xx, RT_USING_ARM_LIBC</Define>
+              <Define>USE_HAL_DRIVER, STM32F469xx, LFS_CONFIG=lfs_config.h, RT_USING_ARM_LIBC</Define>
               <Undefine></Undefine>
-              <IncludePath>applications;.;drivers;drivers\audio;Libraries\CMSIS\Device\ST\STM32F4xx\Include;Libraries\CMSIS\Include;Libraries\STM32F4xx_HAL_Driver\Inc;rt-thread\include;rt-thread\libcpu\arm\cortex-m4;rt-thread\libcpu\arm\common;rt-thread\components\dfs\include;rt-thread\components\dfs\filesystems\devfs;rt-thread\components\dfs\filesystems\elmfat;rt-thread\components\dfs\filesystems\romfs;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\spi;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\finsh;rt-thread\components\libc\compilers\armlibc;rt-thread\components\net\lwip-2.0.2\src;rt-thread\components\net\lwip-2.0.2\src\include;rt-thread\components\net\lwip-2.0.2\src\include\ipv4;rt-thread\components\net\lwip-2.0.2\src\arch\include;rt-thread\components\net\lwip-2.0.2\src\include\netif;rt-thread\components\net\lwip-2.0.2\src\include\posix</IncludePath>
+              <IncludePath>applications;.;drivers;drivers\audio;Libraries\CMSIS\Device\ST\STM32F4xx\Include;Libraries\CMSIS\Include;Libraries\STM32F4xx_HAL_Driver\Inc;packages\littlefs-v0.9.0;rt-thread\include;rt-thread\libcpu\arm\cortex-m4;rt-thread\libcpu\arm\common;rt-thread\components\dfs\include;rt-thread\components\dfs\filesystems\devfs;rt-thread\components\dfs\filesystems\elmfat;rt-thread\components\dfs\filesystems\romfs;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\spi;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\finsh;rt-thread\components\libc\compilers\armlibc;rt-thread\components\libc\compilers\common;rt-thread\components\net\lwip-2.0.2\src;rt-thread\components\net\lwip-2.0.2\src\include;rt-thread\components\net\lwip-2.0.2\src\include\ipv4;rt-thread\components\net\lwip-2.0.2\src\arch\include;rt-thread\components\net\lwip-2.0.2\src\include\netif;rt-thread\components\net\lwip-2.0.2\src\include\posix</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -372,7 +372,7 @@
             <ScatterFile>.\stm32_rom.sct</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
-            <Misc>--keep *.o(.rti_fn.*)   --keep *.o(FSymTab)</Misc>
+            <Misc> --keep *.o(.rti_fn.*)   --keep *.o(FSymTab)</Misc>
             <LinkerInputFile></LinkerInputFile>
             <DisabledWarnings></DisabledWarnings>
           </LDads>
@@ -471,6 +471,16 @@
               <FileName>drv_rw00x.c</FileName>
               <FileType>1</FileType>
               <FilePath>drivers\drv_rw00x.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_qspi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>drivers\drv_qspi.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32469i_discovery_qspi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>drivers\stm32469i_discovery_qspi.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -920,6 +930,31 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>littlefs</GroupName>
+          <Files>
+            <File>
+              <FileName>dfs_lfs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>packages\littlefs-v0.9.0\dfs_lfs.c</FilePath>
+            </File>
+            <File>
+              <FileName>lfs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>packages\littlefs-v0.9.0\lfs.c</FilePath>
+            </File>
+            <File>
+              <FileName>lfs_crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>packages\littlefs-v0.9.0\lfs_crc.c</FilePath>
+            </File>
+            <File>
+              <FileName>lfs_util.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>packages\littlefs-v0.9.0\lfs_util.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>Kernel</GroupName>
           <Files>
             <File>
@@ -1137,7 +1172,7 @@
                   <MiscControls></MiscControls>
                   <Define> </Define>
                   <Undefine> </Undefine>
-                  <IncludePath></IncludePath>
+                  <IncludePath> </IncludePath>
                 </VariousControls>
               </Cads>
               <Aads>
@@ -1182,6 +1217,11 @@
               <FilePath>rt-thread\components\drivers\misc\pin.c</FilePath>
             </File>
             <File>
+              <FileName>mtd_nor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\drivers\mtd\mtd_nor.c</FilePath>
+            </File>
+            <File>
               <FileName>block_dev.c</FileName>
               <FileType>1</FileType>
               <FilePath>rt-thread\components\drivers\sdio\block_dev.c</FilePath>
@@ -1207,11 +1247,6 @@
               <FilePath>rt-thread\components\drivers\sdio\mmc.c</FilePath>
             </File>
             <File>
-              <FileName>dataqueue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>rt-thread\components\drivers\src\dataqueue.c</FilePath>
-            </File>
-            <File>
               <FileName>serial.c</FileName>
               <FileType>1</FileType>
               <FilePath>rt-thread\components\drivers\serial\serial.c</FilePath>
@@ -1227,14 +1262,19 @@
               <FilePath>rt-thread\components\drivers\spi\spi_dev.c</FilePath>
             </File>
             <File>
+              <FileName>spi_wifi_rw009.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\drivers\spi\spi_wifi_rw009.c</FilePath>
+            </File>
+            <File>
               <FileName>completion.c</FileName>
               <FileType>1</FileType>
               <FilePath>rt-thread\components\drivers\src\completion.c</FilePath>
             </File>
             <File>
-              <FileName>spi_wifi_rw009.c</FileName>
+              <FileName>dataqueue.c</FileName>
               <FileType>1</FileType>
-              <FilePath>rt-thread\components\drivers\spi\spi_wifi_rw009.c</FilePath>
+              <FilePath>rt-thread\components\drivers\src\dataqueue.c</FilePath>
             </File>
             <File>
               <FileName>pipe.c</FileName>
@@ -1325,6 +1365,11 @@
               <FileName>time.c</FileName>
               <FileType>1</FileType>
               <FilePath>rt-thread\components\libc\compilers\armlibc\time.c</FilePath>
+            </File>
+            <File>
+              <FileName>gmtime_r.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\libc\compilers\common\gmtime_r.c</FilePath>
             </File>
           </Files>
         </Group>

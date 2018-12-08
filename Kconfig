@@ -160,4 +160,22 @@ menu "Select ramdisk drivers"
         depends on BSP_USING_RAMDISK 
 endmenu
 
+menu "Select qspi flash drivers"
+    config BSP_USING_QSPI_FLASH
+        bool "Using qspi flash" 
+        default y 
+        select RT_USING_MTD_NOR
+
+    config BSP_USING_QSPI_FLASH_MOUNT
+        bool "Enable qspi flash mount" 
+        default y 
+        select PKG_USING_LITTLEFS
+        depends on BSP_USING_QSPI_FLASH
+
+    config BSP_USING_QSPI_FLASH_PATH_MOUNT
+        string "Path of qspi flash mount"
+        default "/mnt/flash" 
+        depends on BSP_USING_QSPI_FLASH 
+endmenu
+
 endmenu 

@@ -15,6 +15,7 @@
 #define RT_TICK_PER_SECOND 1000
 #define RT_USING_OVERFLOW_CHECK
 #define RT_USING_HOOK
+#define RT_USING_IDLE_HOOK
 #define RT_IDEL_HOOK_LIST_SIZE 4
 #define IDLE_THREAD_STACK_SIZE 256
 #define RT_DEBUG
@@ -74,9 +75,9 @@
 
 #define RT_USING_DFS
 #define DFS_USING_WORKDIR
-#define DFS_FILESYSTEMS_MAX 4
-#define DFS_FILESYSTEM_TYPES_MAX 4
-#define DFS_FD_MAX 16
+#define DFS_FILESYSTEMS_MAX 8
+#define DFS_FILESYSTEM_TYPES_MAX 8
+#define DFS_FD_MAX 64
 #define RT_USING_DFS_ELMFAT
 
 /* elm-chan's FatFs, Generic FAT Filesystem Module */
@@ -100,6 +101,7 @@
 #define RT_USING_I2C
 #define RT_USING_I2C_BITOPS
 #define RT_USING_PIN
+#define RT_USING_MTD_NOR
 #define RT_USING_SDIO
 #define RT_SDIO_STACK_SIZE 512
 #define RT_SDIO_THREAD_PRIORITY 15
@@ -209,6 +211,12 @@
 
 /* system packages */
 
+#define PKG_USING_LITTLEFS
+#define PKG_USING_LITTLEFS_V090
+#define LFS_READ_SIZE 256
+#define LFS_WRITE_SIZE 256
+#define LFS_BLOCK_SIZE 4096
+#define LFS_LOOKAHEAD 512
 
 /* peripheral libraries and drivers */
 
@@ -216,21 +224,16 @@
 /* miscellaneous packages */
 
 
-/* sample package */
-
 /* samples: kernel and components samples */
-
-
-/* example package: hello */
-
-
-/* rtpkgs online packages */
 
 
 /* Privated Packages of RealThread */
 
 
 /* Network Utilities */
+
+
+/* rtpkgs online packages */
 
 #define SOC_STM32F469NI
 
@@ -280,5 +283,11 @@
 #define BSP_USING_RAMDISK_SIZE 4
 #define BSP_USING_RAMDISK_MOUNT
 #define BSP_USING_RAMDISK_PATH_MOUNT "/mnt/tmp"
+
+/* Select qspi flash drivers */
+
+#define BSP_USING_QSPI_FLASH
+#define BSP_USING_QSPI_FLASH_MOUNT
+#define BSP_USING_QSPI_FLASH_PATH_MOUNT "/mnt/flash"
 
 #endif

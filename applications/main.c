@@ -53,11 +53,26 @@ int main(void)
 #elif defined(BSP_USING_SDCARD_BLOCK) && defined(BSP_USING_SDCARD_MOUNT)
     if(dfs_mount("sd0", BSP_USING_SDCARD_PATH_MOUNT, "elm", 0, 0) != 0)
     {
-        rt_kprintf("sdcard mount '%s' failed.\n", BSP_USING_SDCARD_PATH_MOUNT); 
+        rt_kprintf("sd0 mount '%s' failed.\n", BSP_USING_SDCARD_PATH_MOUNT); 
+    }
+    else
+    {
+        extern int chdir(const char *path); 
+        chdir(BSP_USING_SDCARD_PATH_MOUNT); 
     }
     
-    extern int chdir(const char *path); 
-    chdir(BSP_USING_SDCARD_PATH_MOUNT); 
+    
+#endif
+
+#ifdef BSP_USING_QSPI_FLASH_MOUNT
+    if(dfs_mount("qmtd0", BSP_USING_QSPI_FLASH_PATH_MOUNT, "lfs", 0, 0) != 0)
+    {
+        dfs_mkfs("lfs", "qmtd0"); 
+        if(dfs_mount("qmtd0", BSP_USING_QSPI_FLASH_PATH_MOUNT, "lfs", 0, 0) != 0)
+        {
+            rt_kprintf("qmtd0 mount '%s' failed.\n", BSP_USING_QSPI_FLASH_PATH_MOUNT); 
+        }
+    }
 #endif
 
 #if defined(PKG_USING_PLAYER)
@@ -87,5 +102,5 @@ static int _player_init(void)
     
     return RT_EOK; 
 }
-INIT_COMPONENT_EXPORT(_player_init); 
+INIT_COMPONENT_EXPORT(_player_init);
 #endif

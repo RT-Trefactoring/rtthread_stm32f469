@@ -24,8 +24,12 @@ static rt_size_t flash_disk_read(rt_device_t dev,
                                  void *buffer,
                                  rt_size_t size)
 {
-    rt_memcpy(buffer, (rt_uint8_t *)disk_addr + SECTOR_SIZE * pos, SECTOR_SIZE * size);
-    return size;
+    if((pos + size) * SECTOR_SIZE <= DISK_SIZE)
+    {
+        rt_memcpy(buffer, (rt_uint8_t *)disk_addr + SECTOR_SIZE * pos, SECTOR_SIZE * size);
+        return size;
+    }
+    return 0;
 }
 
 static rt_size_t flash_disk_write(rt_device_t dev,
@@ -33,9 +37,12 @@ static rt_size_t flash_disk_write(rt_device_t dev,
                                   const void *buffer,
                                   rt_size_t size)
 {
-    rt_memcpy((rt_uint8_t *)disk_addr + SECTOR_SIZE * pos, buffer, SECTOR_SIZE * size);
-
-    return size;
+    if((pos + size) * SECTOR_SIZE <= DISK_SIZE)
+    {
+        rt_memcpy((rt_uint8_t *)disk_addr + SECTOR_SIZE * pos, buffer, SECTOR_SIZE * size);
+        return size;
+    }
+    return 0;
 }
 
 static rt_err_t flash_disk_control(rt_device_t dev, int cmd, void *args)

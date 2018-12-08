@@ -34,6 +34,7 @@ if PLATFORM == 'gcc':
     # tool-chains
     PREFIX = 'arm-none-eabi-'
     CC = PREFIX + 'gcc'
+    CXX = PREFIX + 'g++'
     AS = PREFIX + 'gcc'
     AR = PREFIX + 'ar'
     LINK = PREFIX + 'gcc'
@@ -41,8 +42,9 @@ if PLATFORM == 'gcc':
     SIZE = PREFIX + 'size'
     OBJDUMP = PREFIX + 'objdump'
     OBJCPY = PREFIX + 'objcopy'
-	
-    DEVICE = ' -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -ffunction-sections -fdata-sections'
+    STRIP = PREFIX + 'strip'
+
+    DEVICE = ' -mcpu=' + CPU + ' -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -ffunction-sections -fdata-sections'
     CFLAGS = DEVICE + ' -std=c99'
     AFLAGS = ' -c' + DEVICE + ' -x assembler-with-cpp -Wa,-mimplicit-it=thumb '
     LFLAGS = DEVICE + ' -Wl,--gc-sections,-Map=rtthread-stm32.map,-cref,-u,Reset_Handler -T stm32_rom.ld'
@@ -57,6 +59,14 @@ if PLATFORM == 'gcc':
         CFLAGS += ' -O2'
 
     POST_ACTION = OBJCPY + ' -O binary $TARGET rtthread.bin\n' + SIZE + ' $TARGET \n'
+
+    # module setting 
+    CXXFLAGS = ' -Woverloaded-virtual -fno-exceptions -fno-rtti '
+    M_CFLAGS = CFLAGS + ' -mlong-calls -fPIC '
+    M_CXXFLAGS = CXXFLAGS + ' -mlong-calls -fPIC'
+    M_LFLAGS = DEVICE + CXXFLAGS + ' -Wl,--gc-sections,-z,max-page-size=0x4' +\
+                                    ' -shared -fPIC -nostartfiles -static-libgcc'
+    M_POST_ACTION = STRIP + ' -R .hash $TARGET\n' + SIZE + ' $TARGET \n'
 
 elif PLATFORM == 'armcc':
     # toolchains
@@ -86,51 +96,3 @@ elif PLATFORM == 'armcc':
         CFLAGS += ' -O2'
 
     POST_ACTION = 'fromelf --bin $TARGET --output rtthread.bin \nfromelf -z $TARGET'
-
-elif PLATFORM == 'iar':
-    # toolchains
-    CC = 'iccarm'
-    AS = 'iasmarm'
-    AR = 'iarchive'
-    LINK = 'ilinkarm'
-    TARGET_EXT = 'out'
-
-    DEVICE = '-Dewarm' # + ' -D' + PART_TYPE
-
-    CFLAGS = DEVICE
-    CFLAGS += ' --diag_suppress Pa050'
-    CFLAGS += ' --no_cse' 
-    CFLAGS += ' --no_unroll' 
-    CFLAGS += ' --no_inline' 
-    CFLAGS += ' --no_code_motion' 
-    CFLAGS += ' --no_tbaa' 
-    CFLAGS += ' --no_clustering' 
-    CFLAGS += ' --no_scheduling' 
-
-    CFLAGS += ' --endian=little' 
-    CFLAGS += ' --cpu=Cortex-M4' 
-    CFLAGS += ' -e' 
-    CFLAGS += ' --fpu=VFPv4_sp'
-    CFLAGS += ' --dlib_config "' + EXEC_PATH + '/arm/INC/c/DLib_Config_Normal.h"'    
-    CFLAGS += ' --silent'
-        
-    AFLAGS = DEVICE
-    AFLAGS += ' -s+' 
-    AFLAGS += ' -w+' 
-    AFLAGS += ' -r' 
-    AFLAGS += ' --cpu Cortex-M4' 
-    AFLAGS += ' --fpu VFPv4_sp' 
-    AFLAGS += ' -S'
-	
-    if BUILD == 'debug':
-        CFLAGS += ' --debug' 
-        CFLAGS += ' -On'    
-    else:
-        CFLAGS += ' -Oh'    	
-	
-    LFLAGS = ' --config "stm32_rom.icf"'
-    LFLAGS += ' --entry __iar_program_start'    
-    #LFLAGS += ' --silent'
-	
-    EXEC_PATH = EXEC_PATH + '/arm/bin/'
-    POST_ACTION = ''

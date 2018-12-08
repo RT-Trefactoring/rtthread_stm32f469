@@ -101,9 +101,14 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
     return HAL_OK;
 }
 
+uint32_t HAL_GetTick(void)
+{
+    return rt_tick_get() * 1000 / RT_TICK_PER_SECOND;
+}
+
 void HAL_Delay(__IO uint32_t Delay)
 {
-    rt_thread_delay(Delay);
+    rt_thread_mdelay(Delay);
 }
 
 void HAL_SuspendTick(void)

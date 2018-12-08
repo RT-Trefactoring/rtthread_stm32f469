@@ -52,6 +52,9 @@ if GetDepend(['RT_USING_USB_DEVICE']):
 if GetDepend(['RT_USING_SPI_WIFI']):
     src += ['drv_rw00x.c']
 
+if GetDepend(['BSP_USING_QSPI_FLASH']):
+    src += ['drv_qspi.c', 'stm32469i_discovery_qspi.c']
+
 group = DefineGroup('Drivers', src, depend = [''], CPPPATH = inc)
 
 Return('group')
