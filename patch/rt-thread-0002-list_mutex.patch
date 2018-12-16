@@ -1,0 +1,38 @@
+From 8e38959469eff90f4f4cec4643c57948ab24111a Mon Sep 17 00:00:00 2001
+From: zyh <lymz@foxmail.com>
+Date: Wed, 21 Nov 2018 11:01:11 +0800
+Subject: [PATCH 2/2] =?UTF-8?q?=E6=B7=BB=E5=8A=A0list=5Fmutex=E5=8F=AF?=
+ =?UTF-8?q?=E6=9F=A5=E7=9C=8B=E8=A2=AB=E6=8C=82=E8=B5=B7=E7=9A=84=E7=BA=BF?=
+ =?UTF-8?q?=E7=A8=8B=E5=90=8D?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ components/finsh/cmd.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/components/finsh/cmd.c b/components/finsh/cmd.c
+index c66f72e65..354d9bac5 100644
+--- a/components/finsh/cmd.c
++++ b/components/finsh/cmd.c
+@@ -271,7 +271,16 @@ static long _list_mutex(struct rt_list_node *list)
+                    m->owner->name,
+                    m->hold,
+                    rt_list_len(&m->parent.suspend_thread));
++        if(rt_list_len(&m->parent.suspend_thread) > 0)
++        {
++            struct rt_list_node *t_node;
++            for (t_node = m->parent.suspend_thread.next; t_node != &m->parent.suspend_thread; t_node = t_node->next)
++            {
++                rt_kprintf("                        %s\n", rt_list_entry(t_node, struct rt_thread, tlist)->name);
++            }
++        }
+     }
++    
+ 
+     return 0;
+ }
+-- 
+2.19.1.windows.1
+

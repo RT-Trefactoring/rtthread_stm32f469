@@ -1,0 +1,106 @@
+From ea29bd22a911f78318172bec83f6ff107e0d3576 Mon Sep 17 00:00:00 2001
+From: ZYH <lymz@foxmail.com>
+Date: Sat, 10 Nov 2018 10:06:22 +0800
+Subject: [PATCH 3/3] =?UTF-8?q?rw009=E8=A1=A5=E4=B8=81?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ components/drivers/spi/spi_wifi_rw009.c | 31 ++++++++++++++++++++-----
+ 1 file changed, 25 insertions(+), 6 deletions(-)
+
+diff --git a/components/drivers/spi/spi_wifi_rw009.c b/components/drivers/spi/spi_wifi_rw009.c
+index 0b9280238..28554a810 100644
+--- a/components/drivers/spi/spi_wifi_rw009.c
++++ b/components/drivers/spi/spi_wifi_rw009.c
+@@ -331,7 +331,7 @@ static rt_err_t spi_wifi_transfer(struct rw009_wifi *dev)
+     struct spi_response resp;
+ 
+     rt_err_t result;
+-    const struct spi_data_packet *data_packet = RT_NULL;
++    static const struct spi_data_packet *data_packet = RT_NULL;
+ 
+     struct rw009_wifi *wifi_device = (struct rw009_wifi *)dev;
+     struct rt_spi_device *rt_spi_device = wifi_device->rt_spi_device;
+@@ -345,13 +345,21 @@ static rt_err_t spi_wifi_transfer(struct rw009_wifi *dev)
+     cmd.magic2 = CMD_MAGIC2;
+ 
+     cmd.flag |= CMD_FLAG_MRDY;
+-
+-    result = rt_mb_recv(&wifi_device->spi_tx_mb,
++    if(data_packet == RT_NULL)
++    {
++        result = rt_mb_recv(&wifi_device->spi_tx_mb,
+                         (rt_uint32_t *)&data_packet,
+                         0);
++    }
++    else
++    {
++        result = RT_EOK;
++    }
++    
+     if ((result == RT_EOK) && (data_packet != RT_NULL) && (data_packet->data_len > 0))
+     {
+         cmd.M2S_len = data_packet->data_len + member_offset(struct spi_data_packet, buffer);
++        
+         //SPI_DEBUG("cmd.M2S_len = %d\n", cmd.M2S_len);
+     }
+ 
+@@ -410,7 +418,7 @@ _bad_resp_magic:
+         /* setup message */
+         message.send_buf = data_packet;//&tx_buffer;
+         message.recv_buf = wifi_device->spi_hw_rx_buffer;//&rx_buffer;
+-        message.length = max_data_len;
++        message.length = RT_ALIGN(max_data_len, 4);
+         message.cs_take = 0;
+         message.cs_release = 1;
+ 
+@@ -422,6 +430,7 @@ _bad_resp_magic:
+         if (cmd.M2S_len && (resp.flag & RESP_FLAG_SRDY))
+         {
+             rt_mp_free((void *)data_packet);
++            data_packet = RT_NULL;
+         }
+ 
+         if ((resp.S2M_len) && (resp.S2M_len <= MAX_SPI_PACKET_SIZE))
+@@ -440,7 +449,7 @@ _bad_resp_magic:
+                 }
+                 else
+                 {
+-                    SPI_DEBUG("!active, RX drop.\n");
++                    //SPI_DEBUG("!active, RX drop.\n");
+                 }
+             }
+             else if (data_packet->data_type == data_type_resp)
+@@ -556,7 +565,7 @@ rt_err_t rw009_wifi_tx(rt_device_t dev, struct pbuf *p)
+ 
+     if (!wifi_device->active)
+     {
+-        WIFI_DEBUG("!active, TX drop!\n");
++        //WIFI_DEBUG("!active, TX drop!\n");
+         return RT_EOK;
+     }
+ 
+@@ -859,8 +868,18 @@ static rt_err_t rw009_scan(void)
+ 
+     return result;
+ }
++static int wifi_join(int argc, char * args[])
++{
++    if(argc !=3)return -1;
++    return rw009_join(args[1], args[2]);
++}
++
+ FINSH_FUNCTION_EXPORT(rw009_scan, SACN and list AP.);
+ FINSH_FUNCTION_EXPORT(rw009_join, RW009 join to AP.);
+ FINSH_FUNCTION_EXPORT(rw009_rssi, get RW009 current AP rssi.);
+ 
++MSH_CMD_EXPORT(wifi_join, wifi_join);
++MSH_CMD_EXPORT(rw009_rssi, rw009_rssi);
++MSH_CMD_EXPORT(rw009_scan, rw009_scan);
++
+ #endif // RT_USING_FINSH
+-- 
+2.19.1.windows.1
+

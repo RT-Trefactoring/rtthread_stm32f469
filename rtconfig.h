@@ -145,14 +145,15 @@
 #define RT_LWIP_MSKADDR "255.255.255.0"
 #define RT_LWIP_UDP
 #define RT_LWIP_TCP
+#define RT_LWIP_RAW
 #define RT_MEMP_NUM_NETCONN 8
 #define RT_LWIP_PBUF_NUM 16
-#define RT_LWIP_RAW_PCB_NUM 4
-#define RT_LWIP_UDP_PCB_NUM 4
+#define RT_LWIP_RAW_PCB_NUM 2
+#define RT_LWIP_UDP_PCB_NUM 2
 #define RT_LWIP_TCP_PCB_NUM 4
-#define RT_LWIP_TCP_SEG_NUM 40
-#define RT_LWIP_TCP_SND_BUF 8196
-#define RT_LWIP_TCP_WND 8196
+#define RT_LWIP_TCP_SEG_NUM 30
+#define RT_LWIP_TCP_SND_BUF 4096
+#define RT_LWIP_TCP_WND 8192
 #define RT_LWIP_TCPTHREAD_PRIORITY 10
 #define RT_LWIP_TCPTHREAD_MBOX_SIZE 8
 #define RT_LWIP_TCPTHREAD_STACKSIZE 1024
@@ -165,6 +166,7 @@
 #define LWIP_SO_SNDTIMEO 1
 #define LWIP_SO_RCVBUF 1
 #define LWIP_NETIF_LOOPBACK 0
+#define RT_LWIP_STATS
 
 /* Modbus master and slave stack */
 
@@ -185,6 +187,8 @@
 
 /* IoT - internet of things */
 
+#define PKG_USING_WEBCLIENT
+#define PKG_USING_WEBCLIENT_V100
 
 /* Wi-Fi */
 
@@ -193,6 +197,10 @@
 
 /* Wiced WiFi */
 
+#define PKG_USING_NETUTILS
+#define PKG_NETUTILS_PING
+#define PKG_NETUTILS_IPERF
+#define PKG_USING_NETUTILS_LATEST_VERSION
 
 /* IoT Cloud */
 
@@ -223,12 +231,40 @@
 
 /* miscellaneous packages */
 
+#define PKG_USING_OPTPARSE
+#define PKG_USING_OPTPARSE_V100
 
 /* samples: kernel and components samples */
 
 
 /* Privated Packages of RealThread */
 
+#define PKG_USING_CODEC
+#define PKG_USING_CODEC_V110
+#define CODEC_USING_HELIX_MP3
+#define CODEC_USING_HELIX_AAC
+#define PKG_USING_PLAYER
+#define PKG_USING_PLAYER_V120
+#define PLAYER_ENABLE_NET_STREAM
+#define PLAYER_USING_NETSTREAM_BUFSZ 720
+#define PLAYER_USING_EXAMPLE00
+#define PLAYER_USING_EXAMPLE01
+
+/* examples */
+
+/* Audio codec configuration */
+
+#define PLAYER_ENABLE_CODEC_WAV
+#define PLAYER_ENABLE_CODEC_MP3
+#define PLAYER_ENABLE_CODEC_AAC
+
+/* Net related configuration */
+
+#define LWIP_TCP_KEEPALIVE 1
+
+/* Application configuration */
+
+#define PLAYER_ENABLE_APP_LIST
 
 /* Network Utilities */
 
