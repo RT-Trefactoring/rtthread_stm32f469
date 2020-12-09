@@ -18,29 +18,29 @@
 #include <stm32f4xx_hal.h>
 #include <rtthread.h>
 
-#define D0	186
-#define D1	191
-#define D2	190
-#define D3	49
-#define D4	189
-#define D5	50
-#define D6	61
-#define D7	188
-#define D8	187
-#define D9	62
-#define D10	102
-#define D11	114
-#define D12	113
-#define D13	175
-#define D14	207
-#define D15	206
+#define IO_D0	186
+#define IO_D1	191
+#define IO_D2	190
+#define IO_D3	49
+#define IO_D4	189
+#define IO_D5	50
+#define IO_D6	61
+#define IO_D7	188
+#define IO_D8	187
+#define IO_D9	62
+#define IO_D10	102
+#define IO_D11	114
+#define IO_D12	113
+#define IO_D13	175
+#define IO_D14	207
+#define IO_D15	206
 
-#define A0	67
-#define A1	40
-#define A2	41
-#define A3	63
-#define A4	64
-#define A5	59
+#define IO_A0	67
+#define IO_A1	40
+#define IO_A2	41
+#define IO_A3	63
+#define IO_A4	64
+#define IO_A5	59
 
 
 #define STM32F4xx_PIN_NUMBERS 216

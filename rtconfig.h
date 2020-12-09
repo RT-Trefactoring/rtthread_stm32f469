@@ -41,15 +41,17 @@
 #define RT_USING_CONSOLE
 #define RT_CONSOLEBUF_SIZE 128
 #define RT_CONSOLE_DEVICE_NAME "uart3"
+#define RT_VER_NUM 0x40001
 #define ARCH_ARM
 #define ARCH_ARM_CORTEX_M
+#define ARCH_ARM_CORTEX_FPU
 #define ARCH_ARM_CORTEX_M4
 
 /* RT-Thread Components */
 
 #define RT_USING_COMPONENTS_INIT
 #define RT_USING_USER_MAIN
-#define RT_MAIN_THREAD_STACK_SIZE 2048
+#define RT_MAIN_THREAD_STACK_SIZE 8192
 #define RT_MAIN_THREAD_PRIORITY 10
 
 /* C++ features */
@@ -98,6 +100,8 @@
 #define RT_USING_DEVICE_IPC
 #define RT_PIPE_BUFSZ 512
 #define RT_USING_SERIAL
+#define RT_SERIAL_USING_DMA
+#define RT_SERIAL_RB_BUFSZ 64
 #define RT_USING_I2C
 #define RT_USING_I2C_BITOPS
 #define RT_USING_PIN
@@ -109,7 +113,6 @@
 #define RT_MMCSD_THREAD_PREORITY 22
 #define RT_MMCSD_MAX_PARTITION 16
 #define RT_USING_SPI
-#define RT_USING_SPI_WIFI
 
 /* Using WiFi */
 
@@ -127,46 +130,11 @@
 /* Socket abstraction layer */
 
 
+/* Network interface device */
+
+
 /* light weight TCP/IP stack */
 
-#define RT_USING_LWIP
-#define RT_USING_LWIP202
-#define RT_LWIP_IGMP
-#define RT_LWIP_ICMP
-#define RT_LWIP_DNS
-#define RT_LWIP_DHCP
-#define IP_SOF_BROADCAST 1
-#define IP_SOF_BROADCAST_RECV 1
-
-/* Static IPv4 Address */
-
-#define RT_LWIP_IPADDR "192.168.1.30"
-#define RT_LWIP_GWADDR "192.168.1.1"
-#define RT_LWIP_MSKADDR "255.255.255.0"
-#define RT_LWIP_UDP
-#define RT_LWIP_TCP
-#define RT_LWIP_RAW
-#define RT_MEMP_NUM_NETCONN 8
-#define RT_LWIP_PBUF_NUM 16
-#define RT_LWIP_RAW_PCB_NUM 2
-#define RT_LWIP_UDP_PCB_NUM 2
-#define RT_LWIP_TCP_PCB_NUM 4
-#define RT_LWIP_TCP_SEG_NUM 30
-#define RT_LWIP_TCP_SND_BUF 4096
-#define RT_LWIP_TCP_WND 8192
-#define RT_LWIP_TCPTHREAD_PRIORITY 10
-#define RT_LWIP_TCPTHREAD_MBOX_SIZE 8
-#define RT_LWIP_TCPTHREAD_STACKSIZE 1024
-#define RT_LWIP_ETHTHREAD_PRIORITY 12
-#define RT_LWIP_ETHTHREAD_STACKSIZE 1024
-#define RT_LWIP_ETHTHREAD_MBOX_SIZE 8
-#define LWIP_NETIF_STATUS_CALLBACK 1
-#define SO_REUSE 1
-#define LWIP_SO_RCVTIMEO 1
-#define LWIP_SO_SNDTIMEO 1
-#define LWIP_SO_RCVBUF 1
-#define LWIP_NETIF_LOOPBACK 0
-#define RT_LWIP_STATS
 
 /* Modbus master and slave stack */
 
@@ -180,15 +148,10 @@
 /* Utilities */
 
 
-/* ARM CMSIS */
-
-
 /* RT-Thread online packages */
 
 /* IoT - internet of things */
 
-#define PKG_USING_WEBCLIENT
-#define PKG_USING_WEBCLIENT_V100
 
 /* Wi-Fi */
 
@@ -197,10 +160,6 @@
 
 /* Wiced WiFi */
 
-#define PKG_USING_NETUTILS
-#define PKG_NETUTILS_PING
-#define PKG_NETUTILS_IPERF
-#define PKG_USING_NETUTILS_LATEST_VERSION
 
 /* IoT Cloud */
 
@@ -220,56 +179,27 @@
 /* system packages */
 
 #define PKG_USING_LITTLEFS
-#define PKG_USING_LITTLEFS_V090
+#define PKG_USING_LITTLEFS_LATEST_VERSION
 #define LFS_READ_SIZE 256
-#define LFS_WRITE_SIZE 256
+#define LFS_PROG_SIZE 256
 #define LFS_BLOCK_SIZE 4096
-#define LFS_LOOKAHEAD 512
+#define LFS_CACHE_SIZE 256
+#define LFS_BLOCK_CYCLES 0
+#define LFS_LOOKAHEAD_MAX 512
 
 /* peripheral libraries and drivers */
 
 
 /* miscellaneous packages */
 
-#define PKG_USING_OPTPARSE
-#define PKG_USING_OPTPARSE_V100
 
 /* samples: kernel and components samples */
 
 
 /* Privated Packages of RealThread */
 
-#define PKG_USING_CODEC
-#define PKG_USING_CODEC_V110
-#define CODEC_USING_HELIX_MP3
-#define CODEC_USING_HELIX_AAC
-#define PKG_USING_PLAYER
-#define PKG_USING_PLAYER_V120
-#define PLAYER_ENABLE_NET_STREAM
-#define PLAYER_USING_NETSTREAM_BUFSZ 720
-#define PLAYER_USING_EXAMPLE00
-#define PLAYER_USING_EXAMPLE01
-
-/* examples */
-
-/* Audio codec configuration */
-
-#define PLAYER_ENABLE_CODEC_WAV
-#define PLAYER_ENABLE_CODEC_MP3
-#define PLAYER_ENABLE_CODEC_AAC
-
-/* Net related configuration */
-
-#define LWIP_TCP_KEEPALIVE 1
-
-/* Application configuration */
-
-#define PLAYER_ENABLE_APP_LIST
 
 /* Network Utilities */
-
-
-/* rtpkgs online packages */
 
 #define SOC_STM32F469NI
 
@@ -300,7 +230,7 @@
 
 /* Select audio drivers */
 
-#define BSP_USING_AUDIO
+#define BSP_USING_AUDIO_IN
 
 /* Select sdcard drivers */
 
@@ -311,7 +241,6 @@
 
 /* Select lcd drivers */
 
-#define BSP_USING_LCD
 
 /* Select ramdisk drivers */
 

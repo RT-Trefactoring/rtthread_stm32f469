@@ -30,3 +30,4 @@ JLinkLog.txt
 JLinkSettings.ini
 *.dbsqlite
 .DS_Store
+.vscode

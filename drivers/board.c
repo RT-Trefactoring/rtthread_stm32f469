@@ -53,9 +53,11 @@ static void SystemClock_Config(void)
         while(1);
     }
     
-    PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_SDIO | RCC_PERIPHCLK_CLK48;
+    PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_I2S | RCC_PERIPHCLK_SDIO | RCC_PERIPHCLK_CLK48;
     PeriphClkInitStruct.SdioClockSelection   = RCC_SDIOCLKSOURCE_CLK48;
     PeriphClkInitStruct.Clk48ClockSelection  = RCC_CK48CLKSOURCE_PLLSAIP;
+    PeriphClkInitStruct.PLLI2S.PLLI2SN       = 384;
+    PeriphClkInitStruct.PLLI2S.PLLI2SR       = 2;
     PeriphClkInitStruct.PLLSAI.PLLSAIN       = 384;
     PeriphClkInitStruct.PLLSAI.PLLSAIP       = RCC_PLLSAIP_DIV8;
 
